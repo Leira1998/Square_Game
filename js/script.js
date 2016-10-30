@@ -110,7 +110,8 @@ var check_GameOver = function(num){
 }
 
 var gameOver = false;
-var level = 5;
+var qs = prompt("Level:");
+var level = parseInt(qs) + 1;
 
 var main = function(){
 
