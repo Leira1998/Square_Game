@@ -1,19 +1,6 @@
-var make_squares = function(container_class, square_class, num_of_squares){
-  var $width = $(container_class).width();
-  var $height = $(container_class).height();
+// Square_Game game.js
 
-  var s_width = $width/num_of_squares;
-  var s_height = $width/num_of_squares;
-  var new_style = "<style>."+square_class+" {width:"+s_width.toString()+"px; height:"+s_height.toString()+"px;}</style>";
-
-  $(new_style).appendTo( "head" );
-
-  for (var i = 0; i < num_of_squares*num_of_squares; i++){
-    var div_to_add = "<div class='" + square_class + "' id='" + i.toString() + "'></div>";
-    $(container_class).append(div_to_add);
-  }
-}
-var change_state = function(id, level){
+function change_state(id, level){
   // Square clicked
   var sId = id;
   $('#' + sId.toString()).toggleClass('active');
@@ -94,40 +81,39 @@ var change_state = function(id, level){
     $('#' + sId.toString()).toggleClass('active');
   }
 }
-var check_GameOver = function(num){
+
+function check_GameOver(num){
   var counter = 0;
 
   for (var i = 0; i < num * num; i++) {
     var cl = $("#"+i.toString()).attr('class');
-    if (cl == "square active") counter += 1;
+    if (cl == "box active") counter += 1;
   }
-
-  console.log(counter);
-  console.log(num*num - 1);
 
   if (counter == num*num) return true;
   else return false;
 }
 
 var gameOver = false;
-var qs = prompt("Level:");
-var level = parseInt(qs) + 1;
+var level = 2;
 
 var main = function(){
 
   $('.level-text').text("Level " + (level - 1).toString());
 
-  make_squares('.panel', 'square', level);
-  $('.panel').fadeIn('slow');
+  var game_board = new GridBoard(level, level, 550, 550)
+  game_board.make_board();
+  game_board.make_boxes();
+  $('.board').fadeIn('slow');
 
-  $('.square').click(function() {
+  $('.box').click(function() {
     var $s_id = $(this).attr('id');
 
     change_state($s_id, level);
 
     gameOver = check_GameOver(level);
     if (gameOver){
-      $('.panel').fadeOut('slow');
+      $('.board').fadeOut('slow');
       $('.over').fadeIn('slow');
     }
   });
@@ -141,7 +127,7 @@ $(document).ready(function(){
 
     gameOver = false;
     $('.over').fadeOut('slow');
-    $('.square').remove();
+    $('.board').remove();
     main();
   });
 });
